@@ -1,38 +1,36 @@
-.App {
-  text-align: center;
-}
+$font-family_1: sans-serif;
+$background-color_1: white;
+$background-color_2: #282c34;
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+* {
+  font-family: $font-family_1;
+  font-size: 40px;
 }
-
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+html {
+  line-height: 1.5;
+  -webkit-text-size-adjust: 100%;
+  width: 100%;
+  height: 100%;
+  // --- THIS IS THE ROOT FONT SIZE (10rem === 160px)
+  font-size: 16px;
 }
-
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
+body {
+  margin: 0;
+  width: 100%;
+  height: 100%;
   display: flex;
-  flex-direction: column;
   align-items: center;
   justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
 }
-
-.App-link {
-  color: #61dafb;
+.main {
+  height: 500px;
+  width: 500px;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  grid-template-rows: repeat(4, 1fr);
+  gap: 0.5em;
+  border-radius: 6px;
 }
-
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+h1 {
+  text-align: center;
 }
