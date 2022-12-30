@@ -1,74 +1,84 @@
 import './App.scss';
-import './Component/Cards.scss';
-import { useState, useEffect } from 'react';
-import Card from './Component/Card';
+import React, { useState } from 'react';
 
 function App() {
-  const [prev, setPrev] = useState(-1);
-  const [number, setNumber] = useState(-1);
-  const [items, setItems] = useState(
+  const [rowPrev, setRowPrev] = useState(-1);
+  const [colPrev, setColPrev] = useState(-1);
+  const [array, setArray] = useState([
     [
-      { id: 1, stat: '' },
-      { id: 1, stat: '' },
-      { id: 2, stat: '' },
-      { id: 2, stat: '' },
-      { id: 3, stat: '' },
-      { id: 3, stat: '' },
-      { id: 4, stat: '' },
-      { id: 4, stat: '' },
-      { id: 5, stat: '' },
-      { id: 5, stat: '' },
-      { id: 6, stat: '' },
-      { id: 6, stat: '' },
-      { id: 7, stat: '' },
-      { id: 7, stat: '' },
-      { id: 8, stat: '' },
-      { id: 8, stat: '' }
-    ].sort(() => Math.random() - 0.5)
-  );
-  const handleClick = (id: number) => {
-    if (prev === -1) {
-      items[id].stat = 'active';
-      setItems([...items]);
-      setPrev(id);
-    } else {
-      check(id);
-    }
-  };
+      [1, false],
+      [2, false],
+      [3, false],
+      [4, false]
+    ],
+    [
+      [4, false],
+      [5, false],
+      [3, false],
+      [2, false]
+    ],
+    [
+      [1, false],
+      [5, false],
+      [6, false],
+      [6, false]
+    ],
+    [
+      [7, false],
+      [8, false],
+      [7, false],
+      [8, false]
+    ]
+  ]);
 
-  const check = (current: number) => {
-    if (items[current].id == items[prev].id) {
-      items[current].stat = 'correct';
-      items[prev].stat = 'correct';
-      setNumber(number + 1);
-      setItems([...items]);
-      setPrev(-1);
-    } else {
-      items[current].stat = 'wrong';
-      items[prev].stat = 'wrong';
-      setItems([...items]);
-      setTimeout(() => {
-        items[current].stat = '';
-        items[prev].stat = '';
-        setItems([...items]);
-        setPrev(-1);
-      }, 500);
-    }
-  };
+  const handleClick = (row: number, col: number) => {
+    const newArray: any[][] = new Array(array[0].length)
+      .fill([0, false])
+      .map(() => new Array(array[0].length).fill([0, false]));
 
-  useEffect(() => {
-    setTimeout(() => {
-      if (number >= 7) {
-        setNumber(0);
-        location.reload();
+    newArray.map((item1, row) =>
+      item1.map((item, col) => {
+        newArray[row][col] = array[row][col];
+      })
+    );
+    newArray[row][col][1] = true;
+    setArray(newArray);
+
+    if (rowPrev === -1 && colPrev === -1) {
+      newArray[row][col][1] = true;
+      setArray(newArray);
+      setRowPrev(row);
+      setColPrev(col);
+    } else {
+      if (array[row][col][0] == array[rowPrev][colPrev][0]) {
+        newArray[row][col][1] = true;
+        setArray(newArray);
+        setRowPrev(-1);
+        setColPrev(-1);
+      } else {
+        setTimeout(() => {
+          newArray[rowPrev][colPrev][1] = false;
+          newArray[row][col][1] = false;
+          setArray(newArray);
+          setRowPrev(-1);
+          setColPrev(-1);
+        }, 500);
       }
-    }, 2000);
-  }, [number]);
+    }
+  };
+
   return (
     <div className="main">
-      {items.map((item, index) => (
-        <Card item={item} id={index} handleClick={handleClick} key={index} />
-      ))}
+      {array.map((item1, row) =>
+        item1.map((item, col) => (
+          <div
+            key={`${row}-${col}`}
+            className={`item ${array[row][col][1] ? 'open' : ''}`}
+            onClick={() => handleClick(row, col)}>
+            <div className={`cardValue ${array[row][col][1] ? 'open' : ''}`}>{item[0]}</div>
+          </div>
+        ))
+      )}
     </div>
   );
 }
